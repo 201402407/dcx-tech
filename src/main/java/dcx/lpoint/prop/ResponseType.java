@@ -1,3 +1,7 @@
+/**
+ * 통신 후 받은 응답 코드
+ */
+
 package dcx.lpoint.prop;
 
 public enum ResponseType {

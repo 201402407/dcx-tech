@@ -2,11 +2,16 @@
 package dcx.lpoint.svo;
 
 import com.google.common.primitives.Bytes;
-import mosample.bo.lpoint.exception.TranTypeException;
-import mosample.bo.lpoint.properties.DataType;
-import mosample.bo.lpoint.tran.TranSerializer;
-import mosample.bo.lpoint.util.TranUtils;
 
+import dcx.comn.exception.TranTypeException;
+import dcx.comn.util.TranUtils;
+import dcx.lpoint.prop.DataType;
+import dcx.lpoint.tran.TranSerializer;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class LP7000SVo implements TranSerializer {
 
 	private static final long serialVersionUID = -3933435878451926209L;
@@ -18,38 +23,6 @@ public class LP7000SVo implements TranSerializer {
 
 	public LP7000SVo() {
 		this.mId = "L380000002";
-	}
-
-	public String getCardNo() {
-		return cardNo;
-	}
-
-	public void setCardNo(String cardNo) {
-		this.cardNo = cardNo;
-	}
-
-	public String getCustNo() {
-		return custNo;
-	}
-
-	public void setCustNo(String custNo) {
-		this.custNo = custNo;
-	}
-
-	public String getmId() {
-		return mId;
-	}
-
-	public void setmId(String mId) {
-		this.mId = mId;
-	}
-
-	public String getFiller() {
-		return filler;
-	}
-
-	public void setFiller(String filler) {
-		this.filler = filler;
 	}
 
 	@Override

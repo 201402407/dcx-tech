@@ -1,3 +1,7 @@
+/**
+ * 보안 관련 Util
+ */
+
 package dcx.comn.util;
 
 import java.io.UnsupportedEncodingException;

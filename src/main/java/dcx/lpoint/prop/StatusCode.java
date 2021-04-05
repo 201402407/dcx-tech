@@ -1,3 +1,7 @@
+/**
+ * 통신 상태 코드
+ */
+
 package dcx.lpoint.prop;
 
 public enum StatusCode {

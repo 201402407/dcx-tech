@@ -1,9 +1,13 @@
+// Receive Value Object(수신 데이터. 가공 완료 후 전송하기 위한 데이터)
 package dcx.lpoint.rvo;
 
+import dcx.comn.util.TranUtils;
+import dcx.lpoint.tran.TranDeserializer;
+import lombok.Getter;
+import lombok.Setter;
 
-import mosample.bo.lpoint.tran.TranDeserializer;
-import mosample.bo.lpoint.util.TranUtils;
-
+@Getter
+@Setter
 public class LP7001RVo implements TranDeserializer {
 
 	private static final long serialVersionUID = 2575053120703824340L;
@@ -18,86 +22,6 @@ public class LP7001RVo implements TranDeserializer {
 	private String cardCode;					// 제휴카드코드			AN	10			신용카드상품종류코드
 	private String cardGoodsCode;				// 멤버스카드상품코드	AN	10
 	private String filler;						// FILLER				A	275
-
-	public String getCardNo() {
-		return cardNo;
-	}
-
-	public void setCardNo(String cardNo) {
-		this.cardNo = cardNo;
-	}
-
-	public String getCustNo() {
-		return custNo;
-	}
-
-	public void setCustNo(String custNo) {
-		this.custNo = custNo;
-	}
-
-	public String getmId() {
-		return mId;
-	}
-
-	public void setmId(String mId) {
-		this.mId = mId;
-	}
-
-	public int getUseablePoint() {
-		return useablePoint;
-	}
-
-	public void setUseablePoint(int useablePoint) {
-		this.useablePoint = useablePoint;
-	}
-
-	public String getSignPoint() {
-		return signPoint;
-	}
-
-	public void setSignPoint(String signPoint) {
-		this.signPoint = signPoint;
-	}
-
-	public int getPoint() {
-		return point;
-	}
-
-	public void setPoint(int point) {
-		this.point = point;
-	}
-
-	public String getMessage() {
-		return message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
-	}
-
-	public String getCardCode() {
-		return cardCode;
-	}
-
-	public void setCardCode(String cardCode) {
-		this.cardCode = cardCode;
-	}
-
-	public String getCardGoodsCode() {
-		return cardGoodsCode;
-	}
-
-	public void setCardGoodsCode(String cardGoodsCode) {
-		this.cardGoodsCode = cardGoodsCode;
-	}
-
-	public String getFiller() {
-		return filler;
-	}
-
-	public void setFiller(String filler) {
-		this.filler = filler;
-	}
 
 	@Override
 	public void deserialize(byte[] bytes) throws Exception {

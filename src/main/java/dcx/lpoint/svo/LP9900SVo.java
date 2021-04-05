@@ -1,9 +1,12 @@
 package dcx.lpoint.svo;
 
+import dcx.comn.exception.TranTypeException;
+import dcx.lpoint.tran.TranSerializer;
+import lombok.Getter;
+import lombok.Setter;
 
-import mosample.bo.lpoint.exception.TranTypeException;
-import mosample.bo.lpoint.tran.TranSerializer;
-
+@Getter
+@Setter
 public class LP9900SVo implements TranSerializer {
 
 	private static final long serialVersionUID = 642029625401317210L;

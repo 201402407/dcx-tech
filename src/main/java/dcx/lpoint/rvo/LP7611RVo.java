@@ -1,9 +1,11 @@
 package dcx.lpoint.rvo;
 
 
-import mosample.bo.lpoint.tran.TranDeserializer;
-import mosample.bo.lpoint.util.TranUtils;
+import dcx.comn.util.TranUtils;
+import dcx.lpoint.tran.TranDeserializer;
+import lombok.Data;
 
+@Data
 public class LP7611RVo implements TranDeserializer {
 
 	private static final long serialVersionUID = 5770755814263876626L;
@@ -19,94 +21,6 @@ public class LP7611RVo implements TranDeserializer {
 	private int useablePoint;					// 가용포인트			N	9
 	private String failCount;					// 비밀번호 오류횟수	A	1			5회 오류시 비밀번호 잠금
 	private String filler;						// FILLER				A	40
-
-	public String getCardNo() {
-		return cardNo;
-	}
-
-	public void setCardNo(String cardNo) {
-		this.cardNo = cardNo;
-	}
-
-	public String getCustNoCode() {
-		return custNoCode;
-	}
-
-	public void setCustNoCode(String custNoCode) {
-		this.custNoCode = custNoCode;
-	}
-
-	public String getCustNo() {
-		return custNo;
-	}
-
-	public void setCustNo(String custNo) {
-		this.custNo = custNo;
-	}
-
-	public String getResponseCode() {
-		return responseCode;
-	}
-
-	public void setResponseCode(String responseCode) {
-		this.responseCode = responseCode;
-	}
-
-	public String getResponseMsg() {
-		return responseMsg;
-	}
-
-	public void setResponseMsg(String responseMsg) {
-		this.responseMsg = responseMsg;
-	}
-
-	public String getConfirmDate() {
-		return confirmDate;
-	}
-
-	public void setConfirmDate(String confirmDate) {
-		this.confirmDate = confirmDate;
-	}
-
-	public String getConfirmTime() {
-		return confirmTime;
-	}
-
-	public void setConfirmTime(String confirmTime) {
-		this.confirmTime = confirmTime;
-	}
-
-	public int getRemainPoint() {
-		return remainPoint;
-	}
-
-	public void setRemainPoint(int remainPoint) {
-		this.remainPoint = remainPoint;
-	}
-
-	public int getUseablePoint() {
-		return useablePoint;
-	}
-
-	public void setUseablePoint(int useablePoint) {
-		this.useablePoint = useablePoint;
-	}
-
-	public String getFailCount() {
-		return failCount;
-	}
-
-	public void setFailCount(String failCount) {
-		this.failCount = failCount;
-	}
-
-	public String getFiller() {
-		return filler;
-	}
-
-	public void setFiller(String filler) {
-		this.filler = filler;
-	}
 
 	@Override
 	public void deserialize(byte[] bytes) throws Exception {

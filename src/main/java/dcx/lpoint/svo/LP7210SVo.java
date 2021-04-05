@@ -1,17 +1,23 @@
 package dcx.lpoint.svo;
 
-import com.google.common.primitives.Bytes;
-import mosample.bo.lpoint.exception.TranTypeException;
-import mosample.bo.lpoint.properties.DataType;
-import mosample.bo.lpoint.tran.TranSerializer;
-import mosample.bo.lpoint.util.TranUtils;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import com.google.common.primitives.Bytes;
+
+import dcx.comn.exception.TranTypeException;
+import dcx.comn.util.TranUtils;
+import dcx.lpoint.prop.DataType;
+import dcx.lpoint.tran.TranSerializer;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 온라인몰 사용 승인
  */
+
+@Getter
+@Setter
 public class LP7210SVo implements TranSerializer {
 
 	private static final long serialVersionUID = -3202576603803092970L;
@@ -73,223 +79,7 @@ public class LP7210SVo implements TranSerializer {
 		this.originDealConfirmNo = "";
 		this.originDealDate = "";
 	}
-
-	public String getWcc() {
-		return wcc;
-	}
-
-	public void setWcc(String wcc) {
-		this.wcc = wcc;
-	}
-
-	public String getConfirmType() {
-		return confirmType;
-	}
-
-	public void setConfirmType(String confirmType) {
-		this.confirmType = confirmType;
-	}
-
-	public String getCardNo() {
-		return cardNo;
-	}
-
-	public void setCardNo(String cardNo) {
-		this.cardNo = cardNo;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public String getFiller1() {
-		return filler1;
-	}
-
-	public void setFiller1(String filler1) {
-		this.filler1 = filler1;
-	}
-
-	public String getMid() {
-		return mid;
-	}
-
-	public void setMid(String mid) {
-		this.mid = mid;
-	}
-
-	public String getMno() {
-		return mno;
-	}
-
-	public void setMno(String mno) {
-		this.mno = mno;
-	}
-
-	public String getMConfirmNo() {
-		return mConfirmNo;
-	}
-
-	public void setMConfirmNo(String mConfirmNo) {
-		this.mConfirmNo = mConfirmNo;
-	}
-
-	public String getDealDate() {
-		return dealDate;
-	}
-
-	public void setDealDate(String dealDate) {
-		this.dealDate = dealDate;
-	}
-
-	public String getDealTime() {
-		return dealTime;
-	}
-
-	public void setDealTime(String dealTime) {
-		this.dealTime = dealTime;
-	}
-
-	public String getDealType() {
-		return dealType;
-	}
-
-	public void setDealType(String dealType) {
-		this.dealType = dealType;
-	}
-
-	public String getDealCode() {
-		return dealCode;
-	}
-
-	public void setDealCode(String dealCode) {
-		this.dealCode = dealCode;
-	}
-
-	public String getUseType() {
-		return useType;
-	}
-
-	public void setUseType(String useType) {
-		this.useType = useType;
-	}
-
-	public String getPointFlag() {
-		return pointFlag;
-	}
-
-	public void setPointFlag(String pointFlag) {
-		this.pointFlag = pointFlag;
-	}
-
-	public int getUsePoint() {
-		return usePoint;
-	}
-
-	public void setUsePoint(int usePoint) {
-		this.usePoint = usePoint;
-	}
-
-	public String getFirstPointYn() {
-		return firstPointYn;
-	}
-
-	public void setFirstPointYn(String firstPointYn) {
-		this.firstPointYn = firstPointYn;
-	}
-
-	public int getFirstPoint() {
-		return firstPoint;
-	}
-
-	public void setFirstPoint(int firstPoint) {
-		this.firstPoint = firstPoint;
-	}
-
-	public String getBirthPointYn() {
-		return birthPointYn;
-	}
-
-	public void setBirthPointYn(String birthPointYn) {
-		this.birthPointYn = birthPointYn;
-	}
-
-	public int getBirthPoint() {
-		return birthPoint;
-	}
-
-	public void setBirthPoint(int birthPoint) {
-		this.birthPoint = birthPoint;
-	}
-
-	public String getWedingPointYn() {
-		return wedingPointYn;
-	}
-
-	public void setWedingPointYn(String wedingPointYn) {
-		this.wedingPointYn = wedingPointYn;
-	}
-
-	public int getWedingPoint() {
-		return wedingPoint;
-	}
-
-	public void setWedingPoint(int wedingPoint) {
-		this.wedingPoint = wedingPoint;
-	}
-
-	public String getCashReceipt() {
-		return cashReceipt;
-	}
-
-	public void setCashReceipt(String cashReceipt) {
-		this.cashReceipt = cashReceipt;
-	}
-
-	public String getOriginDealYn() {
-		return originDealYn;
-	}
-
-	public void setOriginDealYn(String originDealYn) {
-		this.originDealYn = originDealYn;
-	}
-
-	public String getOriginDealtype() {
-		return originDealtype;
-	}
-
-	public void setOriginDealtype(String originDealtype) {
-		this.originDealtype = originDealtype;
-	}
-
-	public String getOriginDealConfirmNo() {
-		return originDealConfirmNo;
-	}
-
-	public void setOriginDealConfirmNo(String originDealConfirmNo) {
-		this.originDealConfirmNo = originDealConfirmNo;
-	}
-
-	public String getOriginDealDate() {
-		return originDealDate;
-	}
-
-	public void setOriginDealDate(String originDealDate) {
-		this.originDealDate = originDealDate;
-	}
-
-	public String getFiller() {
-		return filler;
-	}
-
-	public void setFiller(String filler) {
-		this.filler = filler;
-	}
-
+	
 	@Override
 	public byte[] serialize() throws TranTypeException {
 		return Bytes.concat(

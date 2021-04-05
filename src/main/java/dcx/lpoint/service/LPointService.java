@@ -1,26 +1,27 @@
+/**
+ * L.POINT API Service
+ * 데이터 가공, 정제 후 서버 통신 요청
+ */
+
 package dcx.lpoint.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import dcx.lpoint.prop.ResponseType;
+import dcx.lpoint.prop.StatusCode;
+import dcx.lpoint.rvo.LP7001RVo;
+import dcx.lpoint.rvo.LP7211RVo;
+import dcx.lpoint.rvo.LP7221RVo;
+import dcx.lpoint.rvo.LP7611RVo;
+import dcx.lpoint.svo.LP7000SVo;
+import dcx.lpoint.svo.LP7210SVo;
+import dcx.lpoint.svo.LP7220SVo;
+import dcx.lpoint.svo.LP7610SVo;
+import dcx.lpoint.vo.LPointVo;
 import lombok.extern.slf4j.Slf4j;
-import mosample.bo.lpoint.domain.Tran7210;
-import mosample.bo.lpoint.domain.Tran7220;
-import mosample.bo.lpoint.domain.Tran7610;
-import mosample.bo.lpoint.domain.condition.LPointCondition;
-import mosample.bo.lpoint.domain.receive.LP7001;
-import mosample.bo.lpoint.domain.receive.LP7211;
-import mosample.bo.lpoint.domain.receive.LP7221;
-import mosample.bo.lpoint.domain.receive.LP7611;
-import mosample.bo.lpoint.domain.send.LP7000;
-import mosample.bo.lpoint.domain.send.LP7210;
-import mosample.bo.lpoint.domain.send.LP7220;
-import mosample.bo.lpoint.domain.send.LP7610;
-import mosample.bo.lpoint.properties.ResponseType;
-import mosample.bo.lpoint.properties.StatusCode;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
@@ -33,17 +34,17 @@ public class LPointService {
 //	@Scheduled(cron="*/30 * * * * *")
 	public void heartbeat() {
 
-		logger.info("L.POINT 9900 Heart Beat!");
+		log.info("L.POINT 9900 Heart Beat!");
 		try {
 			tranService.send9900();
 		} catch (Exception e) {
-			logger.debug("heartbeat @@" + e.getMessage());
+			log.debug("heartbeat @@" + e.getMessage());
 		}
 	}
 
 	public LP7611RVo certification(LPointVo param) {
 		try {
-			logger.info("=========== certification(L.POINT 본인인증) begin ===========");
+			log.info("=========== certification(L.POINT 본인인증) begin ===========");
 			String lp9900 = tranService.send9900();
 			if ("SUCCESS".equals(lp9900)) {
 			
@@ -57,16 +58,16 @@ public class LPointService {
 
 				Tran7610 tran7610 = tranService.send7610(lp7610);
 
-				logger.trace(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(tran7610));
+				log.trace(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(tran7610));
 
 
 				LP7611RVo lp7611 = (LP7611RVo) tran7610.getResult();
 	
 				if (!ResponseType.SUCCESS.getCode().equals(tran7610.getHeader().getResponseCode())) {
-					logger.error("[본인인증 {} 회 실패] {} - {}", lp7611.getFailCount(), lp7611.getCardNo().substring(0, 4) + "-****-****" + lp7611.getCardNo().substring(13, 16), "LPOINT 인증에 실패 하였습니다. ");
+					log.error("[본인인증 {} 회 실패] {} - {}", lp7611.getFailCount(), lp7611.getCardNo().substring(0, 4) + "-****-****" + lp7611.getCardNo().substring(13, 16), "LPOINT 인증에 실패 하였습니다. ");
 					return lp7611;
 				}
-				logger.info("=========== certification(L.POINT 본인인증 성공) end   ===========");
+				log.info("=========== certification(L.POINT 본인인증 성공) end   ===========");
 				
 				return lp7611;
 			} else {
@@ -77,24 +78,24 @@ public class LPointService {
 			}
 		} catch (Exception e) {
 			// LPoint 사용 처리 결과  오류
-			logger.error("[{}] {}", "인증실패", e.getMessage());
+			log.error("[{}] {}", "인증실패", e.getMessage());
 			return null;
 		}
 	}
 
 	public LP7001RVo checkLpoint(LPointVo param) throws Exception {
 		try {
-			logger.info("=========== checkLpoint begin111 ===========");
+			log.info("=========== checkLpoint begin111 ===========");
 			String lp9900 = tranService.send9900();
 			String cardNo = param.getCardNo();
 			String custNo = param.getCustNo();
-			logger.info("카드번호: {}, 고객번호: {}.", cardNo, custNo);
+			log.info("카드번호: {}, 고객번호: {}.", cardNo, custNo);
 			
 			if("nullnullnullnull".equals(cardNo)) {
 				cardNo = "";
 			}
 			
-			logger.info("카드번호: {}, 고객번호: {}.", cardNo, custNo);
+			log.info("카드번호: {}, 고객번호: {}.", cardNo, custNo);
 			if ("SUCCESS".equals(lp9900)) {
 				LP7000SVo lp7000 = new LP7000SVo();
 				lp7000.setCardNo(cardNo);
@@ -102,32 +103,32 @@ public class LPointService {
 				
 				LP7001RVo lp7001 = tranService.send7000(lp7000);
 
-				logger.info("=========== checkLpoint end ===========");
+				log.info("=========== checkLpoint end ===========");
 				return lp7001;
 			} else {
-				logger.error("9900 전문 실패");
+				log.error("9900 전문 실패");
 				throw new Exception("9900 전문 실패");
 			}
 		} catch (Exception e) {
 			// LPoint 조회 결과 오류
-			logger.error("[{}] {}", "checkLpoint 실패", e.getMessage());
+			log.error("[{}] {}", "checkLpoint 실패", e.getMessage());
 			throw e;
 		}
 	}
 	
 	public StatusCode usePointUsingCustNo(LPointVo param) throws Exception {
-		logger.info("Parameter: cardNo: {}, custNo: {}, password: {}, usePoint: {}", 
+		log.info("Parameter: cardNo: {}, custNo: {}, password: {}, usePoint: {}", 
 				param.getCardNo(), param.getCustNo(), param.getPassword(), param.getUsePoint());
 		
 		LP7611RVo lp7611 = certification(param);
 		if(lp7611 == null) {
-			logger.info("7610 전문 실패 (본인 인증)");
+			log.info("7610 전문 실패 (본인 인증)");
 			return StatusCode.USE_FAIL;
 		}
-		logger.info("7610 전문 성공 (본인 인증)");
+		log.info("7610 전문 성공 (본인 인증)");
 		
 		String cardNo = lp7611.getCardNo();
-		logger.info("7610 전문 결과 카드번호: {}.", cardNo);
+		log.info("7610 전문 결과 카드번호: {}.", cardNo);
 
 		param.setCardNo(cardNo);
 
@@ -146,12 +147,12 @@ public class LPointService {
 
 			// LPoint 사용 처리 결과  오류
 			if (!ResponseType.SUCCESS.getCode().equals(tran7210.getHeader().getResponseCode())) {
-				logger.error("[{}] {}", StatusCode.USE_FAIL.getMessage(), ResponseType.getResponseType(tran7210.getHeader().getResponseCode()).getMessage());
+				log.error("[{}] {}", StatusCode.USE_FAIL.getMessage(), ResponseType.getResponseType(tran7210.getHeader().getResponseCode()).getMessage());
 				return StatusCode.USE_FAIL;
 			}
 			LP7211RVo result = (LP7211RVo) tran7210.getResult();
-			logger.trace(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(tran7210));
-			logger.trace(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(result));
+			log.trace(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(tran7210));
+			log.trace(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(result));
 			param.setTrackingNo(tran7210.getHeader().getTrackingNo());		// 추적번호
 			param.setMConfirmNo(result.getMConfirmNo());					// 제휴사 승인번호
 			param.setDealDate(result.getDealDate());						// 거래일자
@@ -162,7 +163,7 @@ public class LPointService {
 			param.setUsePoint(result.getUsePoint());						// L.POINT 사용금액
 
 		} catch (Exception e) {
-			logger.error("[{}] {}", StatusCode.USE_FAIL.getMessage(), e.getMessage());
+			log.error("[{}] {}", StatusCode.USE_FAIL.getMessage(), e.getMessage());
 			return StatusCode.USE_FAIL;
 		}
 
@@ -186,15 +187,15 @@ public class LPointService {
 			lp7220.setOriginDealDate(param.getDealDate());
 			Tran7220 tran7220 = tranService.send7220(lp7220);
 
-			logger.trace(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(tran7220));
+			log.trace(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(tran7220));
 			// LPoint 취소 처리 결과  오류
 			if (!ResponseType.SUCCESS.getCode().equals(tran7220.getHeader().getResponseCode())) {
-				logger.error("[{}] {}", StatusCode.USE_FAIL.getMessage(), ResponseType.getResponseType(tran7220.getHeader().getResponseCode()).getMessage());
+				log.error("[{}] {}", StatusCode.USE_FAIL.getMessage(), ResponseType.getResponseType(tran7220.getHeader().getResponseCode()).getMessage());
 				return StatusCode.USE_FAIL;
 			}
 			LP7221RVo result = (LP7221RVo) tran7220.getResult();
 			
-			logger.trace(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(result));
+			log.trace(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(result));
 			param.setTrackingNo(tran7220.getHeader().getTrackingNo());		// 추적번호
 			
 			param.setConfirmNo(result.getConfirmNo());						// 취소승인번호
@@ -207,7 +208,7 @@ public class LPointService {
 			param.setMConfirmNo(result.getMConfirmNo());					// 제휴사 승인번호
 
 		} catch (Exception e) {
-			logger.error("[{}] {}", StatusCode.USE_FAIL.getMessage(), e.getMessage());
+			log.error("[{}] {}", StatusCode.USE_FAIL.getMessage(), e.getMessage());
 			return StatusCode.USE_FAIL;
 		}
 

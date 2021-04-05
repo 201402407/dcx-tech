@@ -1,22 +1,26 @@
+/**
+ * L.POINT API Controller
+ * API 요청 수신, 응답 처리
+ */
+
 package dcx.lpoint.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.HashMap;
+import java.util.Map;
 
-import dcx.lpoint.service.LPointService;
-import lombok.extern.slf4j.Slf4j;
-import mosample.bo.lpoint.domain.condition.LPointCondition;
-import mosample.bo.lpoint.domain.receive.LP7001;
-import mosample.bo.lpoint.domain.receive.LP7611;
-import mosample.bo.lpoint.properties.StatusCode;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import dcx.lpoint.prop.StatusCode;
+import dcx.lpoint.rvo.LP7001RVo;
+import dcx.lpoint.rvo.LP7611RVo;
+import dcx.lpoint.service.LPointService;
+import dcx.lpoint.vo.LPointVo;
+import lombok.extern.slf4j.Slf4j;
 
 @RequestMapping("/lpoint")
 @RestController
@@ -28,9 +32,9 @@ public class LPointController {
 	@Autowired
 	LPointService service;
 
-	@RequestMapping("certification")
+	@RequestMapping("/certification")
 	public LP7611RVo certification(LPointVo condition) throws Exception {
-		logger.debug(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(condition));
+		log.debug(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(condition));
 		LP7611RVo result = service.certification(condition);
 		if (result == null) {
 			result = new LP7611RVo();
@@ -40,9 +44,9 @@ public class LPointController {
 		return result;
 	}
 
-	@RequestMapping("checkLpoint")
+	@RequestMapping("/checkLpoint")
 	public @ResponseBody Map checkLpoint(LPointVo condition) throws Exception {
-		logger.debug(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(condition));
+		log.debug(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(condition));
 		Map response = new HashMap();
 		try {
 			LP7001RVo result = service.checkLpoint(condition);
@@ -53,21 +57,21 @@ public class LPointController {
 		return response;
 	}
 
-	@RequestMapping("useLpointUsingCustNo")
+	@RequestMapping("/useLpointUsingCustNo")
 	public StatusCode useLpointUsingCustNo(LPointVo condition) throws Exception {
-		logger.debug(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(condition));
+		log.debug(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(condition));
 		return service.usePointUsingCustNo(condition);
 	}
 	
-	@RequestMapping("use")
+	@RequestMapping("/use")
 	public StatusCode useLpoint(LPointVo condition) throws Exception {
-		logger.debug(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(condition));
+		log.debug(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(condition));
 		return service.useLPoint(condition);
 	}
 
-	@RequestMapping("cancel")
+	@RequestMapping("/cancel")
 	public StatusCode cancelLpoint(LPointVo condition) throws Exception {
-		logger.debug(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(condition));
+		log.debug(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(condition));
 		return service.cancelLPoint(condition);
 	}
 
