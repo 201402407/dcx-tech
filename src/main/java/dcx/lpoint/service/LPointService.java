@@ -1,6 +1,8 @@
 package dcx.lpoint.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import lombok.extern.slf4j.Slf4j;
 import mosample.bo.lpoint.domain.Tran7210;
 import mosample.bo.lpoint.domain.Tran7220;
 import mosample.bo.lpoint.domain.Tran7610;
@@ -21,16 +23,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class LPointService {
-
-	private final Logger logger = LoggerFactory.getLogger(LPointService.class);
 	private final ObjectMapper mapper = new ObjectMapper();
-	private TranService tranService;
-
+	
 	@Autowired
-	public void setTranService(TranService tranService) {
-		this.tranService = tranService;
-	}
+	private TranService tranService;
 
 //	@Scheduled(cron="*/30 * * * * *")
 	public void heartbeat() {
@@ -43,14 +41,14 @@ public class LPointService {
 		}
 	}
 
-	public LP7611 certification(LPointCondition param) {
+	public LP7611RVo certification(LPointVo param) {
 		try {
 			logger.info("=========== certification(L.POINT 본인인증) begin ===========");
 			String lp9900 = tranService.send9900();
 			if ("SUCCESS".equals(lp9900)) {
 			
 			
-				LP7610 lp7610 = new LP7610();
+				LP7610SVo lp7610 = new LP7610SVo();
 				lp7610.setCardNo(param.getCardNo());
 				lp7610.setCustNo(param.getCustNo());
 				lp7610.setCustNoCode("1");
@@ -62,7 +60,7 @@ public class LPointService {
 				logger.trace(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(tran7610));
 
 
-				LP7611 lp7611 = (LP7611) tran7610.getResult();
+				LP7611RVo lp7611 = (LP7611RVo) tran7610.getResult();
 	
 				if (!ResponseType.SUCCESS.getCode().equals(tran7610.getHeader().getResponseCode())) {
 					logger.error("[본인인증 {} 회 실패] {} - {}", lp7611.getFailCount(), lp7611.getCardNo().substring(0, 4) + "-****-****" + lp7611.getCardNo().substring(13, 16), "LPOINT 인증에 실패 하였습니다. ");
@@ -72,7 +70,7 @@ public class LPointService {
 				
 				return lp7611;
 			} else {
-				LP7611 lp7611 = new LP7611();
+				LP7611RVo lp7611 = new LP7611RVo();
 				lp7611.setResponseCode("6");
 				lp7611.setResponseMsg("본인인증 통신상태 이상");
 				return lp7611;
@@ -84,7 +82,7 @@ public class LPointService {
 		}
 	}
 
-	public LP7001 checkLpoint(LPointCondition param) throws Exception {
+	public LP7001RVo checkLpoint(LPointVo param) throws Exception {
 		try {
 			logger.info("=========== checkLpoint begin111 ===========");
 			String lp9900 = tranService.send9900();
@@ -98,11 +96,11 @@ public class LPointService {
 			
 			logger.info("카드번호: {}, 고객번호: {}.", cardNo, custNo);
 			if ("SUCCESS".equals(lp9900)) {
-				LP7000 lp7000 = new LP7000();
+				LP7000SVo lp7000 = new LP7000SVo();
 				lp7000.setCardNo(cardNo);
 				lp7000.setCustNo(custNo);
 				
-				LP7001 lp7001 = tranService.send7000(lp7000);
+				LP7001RVo lp7001 = tranService.send7000(lp7000);
 
 				logger.info("=========== checkLpoint end ===========");
 				return lp7001;
@@ -117,11 +115,11 @@ public class LPointService {
 		}
 	}
 	
-	public StatusCode usePointUsingCustNo(LPointCondition param) throws Exception {
+	public StatusCode usePointUsingCustNo(LPointVo param) throws Exception {
 		logger.info("Parameter: cardNo: {}, custNo: {}, password: {}, usePoint: {}", 
 				param.getCardNo(), param.getCustNo(), param.getPassword(), param.getUsePoint());
 		
-		LP7611 lp7611 = certification(param);
+		LP7611RVo lp7611 = certification(param);
 		if(lp7611 == null) {
 			logger.info("7610 전문 실패 (본인 인증)");
 			return StatusCode.USE_FAIL;
@@ -136,10 +134,10 @@ public class LPointService {
 		return useLPoint(param);
 	}
 
-	public StatusCode useLPoint(LPointCondition param) throws Exception {
+	public StatusCode useLPoint(LPointVo param) throws Exception {
 		// 1. LPoint 사용 처리
 		try {
-			LP7210 lp7210 = new LP7210();
+			LP7210SVo lp7210 = new LP7210SVo();
 			lp7210.setCardNo(param.getCardNo());
 			lp7210.setPassword(param.getPassword());
 			lp7210.setUsePoint(param.getUsePoint());
@@ -151,7 +149,7 @@ public class LPointService {
 				logger.error("[{}] {}", StatusCode.USE_FAIL.getMessage(), ResponseType.getResponseType(tran7210.getHeader().getResponseCode()).getMessage());
 				return StatusCode.USE_FAIL;
 			}
-			LP7211 result = (LP7211) tran7210.getResult();
+			LP7211RVo result = (LP7211RVo) tran7210.getResult();
 			logger.trace(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(tran7210));
 			logger.trace(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(result));
 			param.setTrackingNo(tran7210.getHeader().getTrackingNo());		// 추적번호
@@ -174,10 +172,10 @@ public class LPointService {
 	}
 
 
-	public StatusCode cancelLPoint(LPointCondition param) throws Exception {
+	public StatusCode cancelLPoint(LPointVo param) throws Exception {
 		// 1. LPoint 취소 처리
 		try {
-			LP7220 lp7220 = new LP7220();
+			LP7220SVo lp7220 = new LP7220SVo();
 			lp7220.setCardNo(param.getCardNo());
 			lp7220.setPassword(param.getPassword());
 			lp7220.setMConfirmNo(tranService.makeConfirmNo());
@@ -194,7 +192,7 @@ public class LPointService {
 				logger.error("[{}] {}", StatusCode.USE_FAIL.getMessage(), ResponseType.getResponseType(tran7220.getHeader().getResponseCode()).getMessage());
 				return StatusCode.USE_FAIL;
 			}
-			LP7221 result = (LP7221) tran7220.getResult();
+			LP7221RVo result = (LP7221RVo) tran7220.getResult();
 			
 			logger.trace(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(result));
 			param.setTrackingNo(tran7220.getHeader().getTrackingNo());		// 추적번호
