@@ -19,19 +19,19 @@
 
 ## 아키텍쳐 구성
 + dcx
-  + comn
+  + comn (공통)
     + exception
     + util
-  + lpoint
-    + controller
+  + lpoint (엘포인트 API)
+    + controller 
     + qc (DB 연결 시 사용 예정)
-    + prop
+    + prop (Properties)
     + service
-    + vo
-    + svo
-    + rvo
-    + tran
-      * no 
+    + vo (Value Object)
+    + svo (Send Value Object)
+    + rvo (Receive Value Object)
+    + tran (Transfer)
+      * no (전문번호 헤더)
 
 ## 사용 라이브러리
 * Lombok
