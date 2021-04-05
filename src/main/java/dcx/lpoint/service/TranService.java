@@ -1,19 +1,37 @@
+/**
+ * 통신에 사용하는 서비스
+ * tranNo에 알맞은 전문 번호를 넣어 헤더를 생성한 후, 전송하는 로직
+ * 
+ */
+
 package dcx.lpoint.service;
 
 import javax.sql.DataSource;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import dcx.lpoint.rvo.LP7001RVo;
+import dcx.lpoint.rvo.LP7211RVo;
+import dcx.lpoint.rvo.LP7221RVo;
+import dcx.lpoint.rvo.LP7611RVo;
+import dcx.lpoint.svo.LP7000SVo;
+import dcx.lpoint.svo.LP7210SVo;
+import dcx.lpoint.svo.LP7220SVo;
+import dcx.lpoint.svo.LP7610SVo;
 import dcx.lpoint.tran.TranGateway;
+import dcx.lpoint.tran.no.Tran7000;
+import dcx.lpoint.tran.no.Tran7210;
+import dcx.lpoint.tran.no.Tran7220;
+import dcx.lpoint.tran.no.Tran7610;
+import dcx.lpoint.tran.no.Tran9900;
+import lombok.extern.slf4j.Slf4j;
 
 @Service("tranService")
+@Slf4j
 public class TranService {
-	private final Logger logger = LoggerFactory.getLogger("LPOINT");
 
 	@Autowired
 	TranGateway gateway;
@@ -35,19 +53,19 @@ public class TranService {
 		return "SUCCESS";
 	}
 
-	public LP7001 send7000(LP7000 param) throws Exception {
+	public LP7001RVo send7000(LP7000SVo param) throws Exception {
 
 		Tran7000 tran = new Tran7000();
 		tran.setInput(param);
 		
-		logger.info("Tran7000 getTrackingNo 111 = " +tran.getHeader().getTrackingNo());
+		log.info("Tran7000 getTrackingNo 111 = " +tran.getHeader().getTrackingNo());
 		tran.getHeader().setTrackingNoSuffix(makeSuffixNo());
 		tran.getHeader().setBodyLengh(236);
-		logger.info("Tran7000 getTrackingNo 222 = " +tran.getHeader().getTrackingNo());
+		log.info("Tran7000 getTrackingNo 222 = " +tran.getHeader().getTrackingNo());
 
 		byte[] resultPayload = gateway.send(tran.serialize());
 		Tran7000 resultTran = new Tran7000();
-		LP7001 result = new LP7001();
+		LP7001RVo result = new LP7001RVo();
 		resultTran.getHeader().deserialize(resultPayload);
 		result.deserialize(resultPayload);
 		resultTran.setResult(result);
@@ -55,57 +73,57 @@ public class TranService {
 		return result;
 	}
 
-	public Tran7610 send7610(LP7610 param) throws Exception {
+	public Tran7610 send7610(LP7610SVo param) throws Exception {
 
 		Tran7610 tran = new Tran7610();
 		tran.setInput(param);
 
-		logger.info("Tran7610 getTrackingNo 111 = " +tran.getHeader().getTrackingNo());
+		log.info("Tran7610 getTrackingNo 111 = " +tran.getHeader().getTrackingNo());
 		tran.getHeader().setTrackingNoSuffix(makeSuffixNo());
 		tran.getHeader().setBodyLengh(108);
-		logger.info("Tran7610 getTrackingNo 222 = " +tran.getHeader().getTrackingNo());
+		log.info("Tran7610 getTrackingNo 222 = " +tran.getHeader().getTrackingNo());
 
 		byte[] resultPayload = gateway.send(tran.serialize());
 		Tran7610 resultTran = new Tran7610();
-		LP7611 result = new LP7611();
+		LP7611RVo result = new LP7611RVo();
 		resultTran.getHeader().deserialize(resultPayload);
 		result.deserialize(resultPayload);
 		resultTran.setResult(result);
 		return resultTran;
 	}
 
-	public Tran7210 send7210(LP7210 param) throws Exception {
+	public Tran7210 send7210(LP7210SVo param) throws Exception {
 
 		Tran7210 tran = new Tran7210();
 		tran.setInput(param);
 		
-		logger.info("Tran7210 getTrackingNo 111 = " +tran.getHeader().getTrackingNo());
+		log.info("Tran7210 getTrackingNo 111 = " +tran.getHeader().getTrackingNo());
 		tran.getHeader().setTrackingNoSuffix(makeSuffixNo());
 		tran.getHeader().setBodyLengh(386);
-		logger.info("Tran7210 getTrackingNo 222 = " +tran.getHeader().getTrackingNo());
+		log.info("Tran7210 getTrackingNo 222 = " +tran.getHeader().getTrackingNo());
 
 		byte[] resultPayload = gateway.send(tran.serialize());
 		Tran7210 resultTran = new Tran7210();
-		LP7211 result = new LP7211();
+		LP7211RVo result = new LP7211RVo();
 		resultTran.getHeader().deserialize(resultPayload);
 		result.deserialize(resultPayload);
 		resultTran.setResult(result);
 		return resultTran;
 	}
 
-	public Tran7220 send7220(LP7220 param) throws Exception {
+	public Tran7220 send7220(LP7220SVo param) throws Exception {
 
 		Tran7220 tran = new Tran7220();
 		tran.setInput(param);
 		
-		logger.info("Tran7220 getTrackingNo 111 = " +tran.getHeader().getTrackingNo());
+		log.info("Tran7220 getTrackingNo 111 = " +tran.getHeader().getTrackingNo());
 		tran.getHeader().setTrackingNoSuffix(makeSuffixNo());
 		tran.getHeader().setBodyLengh(386);
-		logger.info("Tran7220 getTrackingNo 222 = " +tran.getHeader().getTrackingNo());
+		log.info("Tran7220 getTrackingNo 222 = " +tran.getHeader().getTrackingNo());
 
 		byte[] resultPayload = gateway.send(tran.serialize());
 		Tran7220 resultTran = new Tran7220();
-		LP7221 result = new LP7221();
+		LP7221RVo result = new LP7221RVo();
 		resultTran.getHeader().deserialize(resultPayload);
 		result.deserialize(resultPayload);
 		resultTran.setResult(result);

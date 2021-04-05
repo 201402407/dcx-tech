@@ -20,6 +20,9 @@ import dcx.lpoint.svo.LP7000SVo;
 import dcx.lpoint.svo.LP7210SVo;
 import dcx.lpoint.svo.LP7220SVo;
 import dcx.lpoint.svo.LP7610SVo;
+import dcx.lpoint.tran.no.Tran7210;
+import dcx.lpoint.tran.no.Tran7220;
+import dcx.lpoint.tran.no.Tran7610;
 import dcx.lpoint.vo.LPointVo;
 import lombok.extern.slf4j.Slf4j;
 
